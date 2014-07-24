@@ -22,7 +22,7 @@
     };
     add_tabs.click(function(){
         var index = 0;
-        var li = added_list.find('li');
+        var li = added_list.children('li');
         if (li.length) {
             index = parseInt(li.last().data('index')) + 1;
             if (index >= 5) {
