@@ -3,18 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <style type="text/css">
+        ::-webkit-scrollbar {  
+          width: 14px;  
+          height: 14px;  
+        }  
+          
+        ::-webkit-scrollbar-track,  
+        ::-webkit-scrollbar-thumb {  
+          border-radius: 999px;  
+          border: 5px solid transparent;  
+        }  
+          
+        ::-webkit-scrollbar-track {  
+          box-shadow: 1px 1px 5px rgba(0,0,0,.2) inset;  
+        }  
+          
+        ::-webkit-scrollbar-thumb {  
+          min-height: 20px;  
+          background-clip: content-box;  
+          box-shadow: 0 0 0 5px #485F73 inset;  
+        }  
+          
+        ::-webkit-scrollbar-corner {  
+          background: transparent;  
+        }
+        .cf:before,
+        .cf:after {
+            content: " ";
+            display: table;
+        }
+        .cf:after {
+            clear: both;
+        }
+        button {
+            background-color: #F2EAD0;
+            cursor: pointer;
+            color: #222D36;
+            box-shadow: 0px 1px 4px rgba(31, 31, 31, 0.75);
+            border: 0;
+            border-radius: 2px;
+            outline: none;
+        }
+        button:hover {
+            background-color: #EFC94C;
+            color: #334D5C;
+        }
+        button:active {
+            background-color: #E0CB87;
+            border: 1px solid #575757;
+        }
         body {
             margin: 0;
             padding: 0;
             width: 200px;
-            height: 400px;
+            min-height: 400px;
             text-align: center;
-            font: 13px Arial;
+            font: 13px 'Helvetica Neue', Helvetica, 'Lucida Grande', Arial, 'Hiragino Sans GB', 微软雅黑, 'WenQuanYi Micro Hei', STHeiti, SimSun, sans-serif;
+            background-color: #485F73;
         }
         .top,.bottom {
             width: 100%;
             height: 200px;
+        }
+        #save_tabs, #show_tabs {
+            width: 100px;
+            height: 50px;
+            font-size: 20px;
+        }
+        #save_tabs {
+            margin-top: 120px;
         }
         .hidden {
             display: none;
@@ -27,25 +86,36 @@
         .added-list > li {
             min-height: 40px;
             margin: 10px 0;
-            cursor: pointer;
-            background-color: #CBE3E4;
+            border-radius: 2px;
+            background-color: #A9D9CB;
+            box-shadow: 0 2px 10px rgba(0,0,0,.5),0 2px 3px rgba(0,0,0,.5);
         }
         .item-count {
             float: left;
             width: 30px;
             height: 40px;
             line-height: 10px;
+            cursor: pointer;
+            border-radius: 2px;
+            background-color: #F2EAD0;
+        }
+        .item-count:hover {
+            background-color: #EFC94C;
         }
         .item-value {
             float: left;
             width: 150px;
             text-align: left;
+            color: #11161D;
         }
         .item-value .value-top {
             width: 100%;
             height: 20px;
             padding-left: 5px;
-            font-size: 15px;
+            line-height: 20px;
+            font-size: 14px;
+            color: #334D5C;
+            font-weight: 700;
         }
         .item-value .value-bottom {
             width: 100%;
@@ -56,12 +126,28 @@
             display: inline-block;
             margin-top: 5px;
             margin-right: 5px;
+            color: #344459;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .value-bottom .detail-value:hover,.value-bottom .remove-value:hover  {
+            color: #1D2631;
+        }
+        .time-value {
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 10px;
+            font-style: italic;
+            vertical-align: baseline;
         }
         .item-detail {
             display: none;
             width: 100%;
             height: 100px;
             overflow-y: auto;
+            border-top: 1px solid #485F73;
+            border-radius: 2px;
+            background-color: #E7F7FF;
         }
         .item-detail ul {
             list-style: none;
@@ -75,6 +161,7 @@
             float: left;
             width: 16px;
             height: 16px;
+            border-radius: 2px;
         }
         .item-detail .detail-img {
             float: left;
@@ -90,31 +177,102 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        .popup-over {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            top: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.27);
+        }
+        .popup-content {
+            width: 130px;
+            height: 100px;
+            margin: 0 auto;
+            margin-top: 150px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 1px 3px #2B2B2B;
+            background-color: #485F73;
+            color: #fff;
+            border-radius: 2px;
+        }
+        .tabs-name {
+            width: 80%;
+            margin-top: 20px;
+            border: 0;
+            border-radius: 2px;
+            text-align: center;
+            outline: none;
+        }
+        .submit-name {
+            margin-top: 20px;
+        }
+        #back {
+            float: left;
+            margin: 9px;
+            color: #EFC94C;
+            cursor: pointer;
+        }
+        #back:hover {
+            float: left;
+            color: #FFC400;
+        }
+        #add_tabs {
+            float: right;
+            margin-top: 7px;
+            margin-right: 9px;
+            font-size: 25px;
+            color: #E7F7FF;
+            cursor: pointer;
+        }
+        #add_tabs:hover {
+            color: #A9D9CB;
+        }
+        .add-top {
+            height: 20px;
+        }
+        #no_data {
+            color: #1E2A35;
+            font-size: 20px;
+            line-height: 90px;
+            text-shadow: 1px 1px #4D4D4D;
+            background: none;
+            box-shadow: none;
+        }
+        .designer {
+            float: right;
+            margin-right: 8px;
+            font-size: 11px;
+            color: #ccc;
+        }
+        .author {
+            text-decoration: underline;
+            cursor: pointer;
+            color: #F2EAD0;
+        }
     </style>
+
 </head>
 <body>
     <div class="container-1">
         <div class="top">
-            <button id="save_tabs">save</button>
+            <button id="save_tabs">Store</button>
         </div>
         <div class="bottom">
-            <button id="show_tabs">show</button>
+            <button id="show_tabs">Show</button>
         </div>
+        <div class="designer"><em>Design by <span class="author" data-href="http://www.nihaoshijie.com.cn">吕小鸣</span></em></div>
     </div>
     <div class="container-2 hidden">
-        <div class="add-top">
-            <button id="add_tabs">add</button>
+        <div class="add-top cf">
+            <i id="back" class="fa fa-reply"></i>
+            <i id="add_tabs" class="fa fa-plus-circle"></i>
         </div>
         <ul class="added-list" id="added_list">
-            
         </ul>
     </div>
-    <div class="container-3 hidden">
-        <div class="top">
-            <button id="save_tabs">save</button>
-        </div>
-        <div class="bottom">
-            <button id="show_tabs">show</button>
+    <div id="popup_over" class="popup-over hidden">
+        <div class="popup-content">
         </div>
     </div>
     <script src="jquery.min.js"></script>
