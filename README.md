@@ -1,6 +1,11 @@
 chrome-extension-tabs-store
 ===========================
-
+<style>
+img {
+ vertical-align: text-top;
+ display: inline-block;
+}
+</style>
 ##插件说明
 
 是否厌倦了添加收藏自己喜欢的网页？是否觉得在茫茫多历史记录里查找自己喜欢的网页，是否因为不小心把浏览器关了而丢失很关键的页面，不用担心，Tabs Store帮你搞定！
