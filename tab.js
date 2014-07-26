@@ -30,6 +30,13 @@
     var getDetailItem = function(){
         return $("<div class=\"item-detail\"><ul></ul></div>");
     };
+    var dateFormat = function(){
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = (date.getMonth() + 1) < 10 ? ('0' + (date.getMonth() + 1)) : (date.getMonth() + 1);
+        var day = date.getDate() < 10 ? ('0' + date.getDate()) : date.getDate();
+        return year + '/' + month + '/' + day;
+    };
     var Popup = function(){
         this.parentTpl = $('.popup-content');
         this.confirmTpl = $("<h3>Delete?</h3><div class=\"confirm-botton\"><button class=\"ok-button\">Confirm</button><button class=\"no-button\">Cancel</button></div>");
@@ -37,7 +44,7 @@
         this.init = function(){
             this.parentTpl.html('');
             this.parentTpl.find('button').off();
-            this.inputTpl.find('.tabs-name').val('');
+            this.inputTpl.filter('.tabs-name').val('');
         }
         this.init();
         
@@ -48,9 +55,13 @@
         this.confirmTpl.find('.ok-button').on('click',callback);
         this.confirmTpl.find('.no-button').on('click',this.hide);
     };
-    Popup.prototype.getInput = function(callback){
+    Popup.prototype.getInput = function(callback,name){
         this.parentTpl.append(this.inputTpl);
+        if (name) {
+            this.inputTpl.filter('.tabs-name').val(name);
+        }
         this.show();
+        this.inputTpl.filter('.tabs-name').focus();
         $('.submit-name').on('click',callback);
     };
     Popup.prototype.hide = function(){
@@ -96,17 +107,15 @@
                 }
             }
             getTab(function(tabs){
-                var date = new Date();
                 var obj = {
                     'name' : $('.tabs-name').val() || 'no-name',
-                    'time' : date.toLocaleDateString(),
+                    'time' : dateFormat(),
                     'data' : tabs
                 };
                 window.localStorage.setItem(TABPREFIX + index,JSON.stringify(obj));
                 renderList('save');
             });
         });
-        
     });
     added_list.delegate('.item-count', 'click', function(event){
         var current = $(event.currentTarget).parents('.item');
@@ -118,20 +127,19 @@
                     var date = new Date();
                     var obj = {
                         'name' : $('.tabs-name').val() || 'no-name',
-                        'time' : date.toLocaleDateString(),
+                        'time' : dateFormat(),
                         'data' : tabs
                     };
                     window.localStorage.setItem(TABPREFIX + index,JSON.stringify(obj));
                     renderList('save');
                 });
-            });
+            },JSON.parse(window.localStorage.getItem(TABPREFIX + index)).name);
         } else {
             var tabs = JSON.parse(window.localStorage.getItem(TABPREFIX + index));
             for (var i = tabs.data.length - 1; i >= 0; i--) {
                 createTab(tabs.data[i].url);
             };
         }
-        
     });
     added_list.delegate('.detail-value', 'click', function(event){
         var current = $(event.currentTarget);
