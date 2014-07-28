@@ -41,12 +41,12 @@
         this.parentTpl = $('.popup-content');
         this.confirmTpl = $("<h3>Delete?</h3><div class=\"confirm-botton\"><button class=\"ok-button\">Confirm</button><button class=\"no-button\">Cancel</button></div>");
         this.inputTpl = $("<input type=\"text\" maxlength=\"12\" class=\"tabs-name\" /><button class=\"submit-name\">Submit</button>");
-        this.init = function(){
+        var init = function(){
             this.parentTpl.html('');
             this.parentTpl.find('button').off();
             this.inputTpl.filter('.tabs-name').val('');
         }
-        this.init();
+        init();
         
     };
     Popup.prototype.getConfirm = function(callback){
