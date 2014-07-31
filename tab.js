@@ -7,6 +7,7 @@
     var pop_over = $('.popup-over');
     var TABPREFIX = 'tabs_array_';
     var NODATA = 'No Data';
+    var mouseTimer;
     var LiItem = function(obj){
         this.tpl = $("<li class=\"item\" data-type=\""+obj.type+"\" data-index=\""+obj.i+"\"><div class=\"cf\"><span class=\"item-count\"><h4>"+(obj.i+1)+"</h4></span><div class=\"item-value\"><div class=\"value-top\">"+obj.item.name+"</div><div class=\"value-bottom\"><span class=\"time-value\">"+obj.item.time+"</span><i class=\"detail-value fa fa-list-alt\"></i><i class=\"remove-value fa fa-trash-o\"></i></div></div></div></li>");
     };
@@ -41,13 +42,12 @@
         this.parentTpl = $('.popup-content');
         this.confirmTpl = $("<h3>Delete?</h3><div class=\"confirm-botton\"><button class=\"ok-button\">Confirm</button><button class=\"no-button\">Cancel</button></div>");
         this.inputTpl = $("<input type=\"text\" maxlength=\"12\" class=\"tabs-name\" /><button class=\"submit-name\">Submit</button>");
-        var init = function(){
+        this.init = function(){
             this.parentTpl.html('');
             this.parentTpl.find('button').off();
             this.inputTpl.filter('.tabs-name').val('');
         }
-        init();
-        
+        this.init();
     };
     Popup.prototype.getConfirm = function(callback){
         this.parentTpl.append(this.confirmTpl);
@@ -146,7 +146,6 @@
         current.parents('.item-value').parent().next('.item-detail').toggle();
     });
     pop_over.delegate('.tabs-name', 'keyup', function(event){
-        console.log(event);
         if (event.keyCode == 13) {
             $('.submit-name').click();
         }
@@ -154,6 +153,18 @@
     added_list.delegate('.detail-url', 'click', function(event){
         var current = $(event.currentTarget);
         createTab(current.attr('href'));
+    });
+    added_list.delegate('.detail-url', 'mousedown', function(event){
+        var down_date = new Date();
+        mouseTimer = setInterval(function(){
+            if (new Date() - down_date > 1000) {
+                console.log(123);
+                clearInterval(mouseTimer);
+            }
+        },10);
+    });
+    added_list.delegate('.detail-url', 'mouseup', function(event){
+        clearInterval(mouseTimer);
     });
     $('.author').click(function(){
         var current = $(event.target);
