@@ -8,14 +8,15 @@
     var TABPREFIX = 'tabs_array_';
     var NODATA = 'No Data';
     var mouseTimer;
+    var pannelType = '';
     var LiItem = function(obj){
-        this.tpl = $("<li class=\"item\" data-type=\""+obj.type+"\" data-index=\""+obj.i+"\"><div class=\"cf\"><span class=\"item-count\"><h4>"+(obj.i+1)+"</h4></span><div class=\"item-value\"><div class=\"value-top\">"+obj.item.name+"</div><div class=\"value-bottom\"><span class=\"time-value\">"+obj.item.time+"</span><i class=\"detail-value fa fa-list-alt\"></i><i class=\"remove-value fa fa-trash-o\"></i></div></div></div></li>");
+        this.tpl = $("<li class=\"item\" data-index=\""+obj.i+"\"><div class=\"cf\"><span class=\"item-count\"><h4>"+(obj.i+1)+"</h4></span><div class=\"item-value\"><div class=\"value-top\">"+obj.item.name+"</div><div class=\"value-bottom\"><span class=\"time-value\">"+obj.item.time+"</span><i class=\"detail-value fa fa-list-alt\"></i><i class=\"remove-value fa fa-trash-o\"></i></div></div></div></li>");
     };
     LiItem.prototype.getTpl = function(){
         return this.tpl;
     };
     var LiDetailItem = function(obj){
-        this.tpl = $("<li><img "+this.formatImgUrl(obj.favIconUrl)+" class=\"detail-img\"/><a class=\"detail-url\" title=\""+obj.title+"\" href=\""+obj.url+"\">"+obj.url+"</a></li>");
+        this.tpl = $("<li data-index-id=\""+obj.id+"\"><img "+this.formatImgUrl(obj.favIconUrl)+" class=\"detail-img\"/><a class=\"detail-url\" title=\""+obj.title+"\" href=\""+obj.url+"\">"+obj.url+"</a><i class=\"fa fa-times remove-url\"></i></li>");
     };
     LiDetailItem.prototype.getTpl = function(){
         return this.tpl;
@@ -37,6 +38,23 @@
         var month = (date.getMonth() + 1) < 10 ? ('0' + (date.getMonth() + 1)) : (date.getMonth() + 1);
         var day = date.getDate() < 10 ? ('0' + date.getDate()) : date.getDate();
         return year + '/' + month + '/' + day;
+    };
+    var findWhere = function(array,obj){
+        for (var i = 0,length = array.length ; i < length ; i++) {
+            var index = null;
+            for (var key in obj) {
+                if (array[i].hasOwnProperty(key)) {
+                    if (array[i][key] == obj[key]) {
+                        index = i;
+                    }
+                } else {
+                    index = null;
+                }
+            }
+            if (index != null) {
+                return array[index];
+            }
+        }
     };
     var Popup = function(){
         this.parentTpl = $('.popup-content');
@@ -89,10 +107,12 @@
         $('.container-1').show().siblings().hide();
     });
     show_tabs.click(function(){
-        renderList('show');
+        pannelType = 'show';
+        renderList();
     });
     save_tabs.click(function(){
-        renderList('save');
+        pannelType = 'save';
+        renderList();
     });
     add_tabs.click(function(){
         var popup = new Popup();
@@ -113,14 +133,14 @@
                     'data' : tabs
                 };
                 window.localStorage.setItem(TABPREFIX + index,JSON.stringify(obj));
-                renderList('save');
+                renderList();
             });
         });
     });
     added_list.delegate('.item-count', 'click', function(event){
         var current = $(event.currentTarget).parents('.item');
         var index = parseInt(current.data('index'));
-        if (current.data('type') == 'save') {
+        if (pannelType == 'save') {
             var popup = new Popup();
             popup.getInput(function(event){
                 getTab(function(tabs){
@@ -131,7 +151,7 @@
                         'data' : tabs
                     };
                     window.localStorage.setItem(TABPREFIX + index,JSON.stringify(obj));
-                    renderList('save');
+                    renderList();
                 });
             },JSON.parse(window.localStorage.getItem(TABPREFIX + index)).name);
         } else {
@@ -150,21 +170,31 @@
             $('.submit-name').click();
         }
     });
-    added_list.delegate('.detail-url', 'click', function(event){
+    added_list.delegate('.remove-url', 'click', function(event){
         var current = $(event.currentTarget);
-        createTab(current.attr('href'));
+        var index = current.parents('li.item').data('index');
+        var item = window.localStorage.getItem(TABPREFIX + index);
+        item = JSON.parse(item);
+        var itemDetail = findWhere(item.data,{id:current.parent().data('index-id')});
+        item.data.splice(item.data.lastIndexOf(itemDetail),1);
+        window.localStorage.setItem(TABPREFIX + index,JSON.stringify(item));
+        current.parent().fadeOut();
     });
     added_list.delegate('.detail-url', 'mousedown', function(event){
         var down_date = new Date();
         mouseTimer = setInterval(function(){
-            if (new Date() - down_date > 1000) {
-                console.log(123);
+            if (new Date() - down_date > 1000 && pannelType == 'save') {
+                $(event.currentTarget).next('.remove-url').show().addClass('bounceIn animated');
                 clearInterval(mouseTimer);
-            }
+            } 
         },10);
     });
     added_list.delegate('.detail-url', 'mouseup', function(event){
         clearInterval(mouseTimer);
+        if (!$(event.currentTarget).next('.remove-url').is(':visible')) {
+            var current = $(event.currentTarget);
+            createTab(current.attr('href'));
+        }
     });
     $('.author').click(function(){
         var current = $(event.target);
@@ -184,17 +214,16 @@
                 i++;
             }
             window.localStorage.removeItem(TABPREFIX + (window.localStorage.length - 1));
-            renderList('save');
+            renderList();
         });
     });
-    function renderList(type) {
+    function renderList() {
         added_list.html('');
         for (var i = 0 ; i < 5 ; i++) {
             var item = window.localStorage.getItem(TABPREFIX + i);
             if (item) {
                 item = JSON.parse(item);
                 var itemTpl = new LiItem({
-                    'type' : type,
                     'i' : i,
                     'item' : item
                 }).getTpl();
@@ -210,7 +239,7 @@
         if (window.localStorage.length == 0) {
             added_list.append('<li id=\"no_data\">'+NODATA+'</li>');
         }
-        if (type == 'show') {
+        if (pannelType == 'show') {
             added_list.find('.remove-value').remove();
             $('.container-2').find('#add_tabs').hide();
         } else {

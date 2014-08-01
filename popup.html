@@ -54,6 +54,39 @@
             background-color: #E0CB87;
             border: 1px solid #575757;
         }
+        @-webkit-keyframes bounceIn {
+          0% {
+            opacity: 0;
+            -webkit-transform: scale(.3);
+            transform: scale(.3);
+          }
+
+          50% {
+            opacity: 1;
+            -webkit-transform: scale(1.05);
+            transform: scale(1.05);
+          }
+
+          70% {
+            -webkit-transform: scale(.9);
+            transform: scale(.9);
+          }
+
+          100% {
+            opacity: 1;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+          }
+        }
+
+        .bounceIn {
+          -webkit-animation-name: bounceIn;
+          animation-name: bounceIn;
+          -webkit-animation-duration: .7s;
+          animation-duration: .7s;
+          -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+        }
         body {
             margin: 0;
             padding: 0;
@@ -156,6 +189,15 @@
         .item-detail ul li {
             padding: 5px;
             height: 20px;
+            position: relative;
+        }
+        .item-detail .remove-url {
+            display: none;
+            position: absolute;
+            right: 0px;
+            top: 7px;
+            cursor: pointer;
+            color: #A64949;
         }
         .item-detail .detail-img {
             float: left;
