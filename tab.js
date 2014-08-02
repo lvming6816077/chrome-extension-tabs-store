@@ -97,6 +97,11 @@
             callback(tabs);
         });
     };
+    function getSingleTab(callback){
+        chrome.tabs.getSelected(function (tab){
+            callback(tab);
+        });
+    };
     pop_over.click(function(event){
         if ($(event.target).attr('id') == 'popup_over') {
             $('.popup-over').hide();
@@ -143,14 +148,12 @@
         if (pannelType == 'save') {
             var popup = new Popup();
             popup.getInput(function(event){
-                getTab(function(tabs){
-                    var date = new Date();
-                    var obj = {
-                        'name' : $('.tabs-name').val() || 'no-name',
-                        'time' : dateFormat(),
-                        'data' : tabs
-                    };
-                    window.localStorage.setItem(TABPREFIX + index,JSON.stringify(obj));
+                getSingleTab(function(tab){
+                    var current = JSON.parse(window.localStorage.getItem(TABPREFIX + index));
+                    current.name = $('.tabs-name').val() || 'no-name';
+                    current.time = dateFormat();
+                    current.data.push(tab);
+                    window.localStorage.setItem(TABPREFIX + index,JSON.stringify(current));
                     renderList();
                 });
             },JSON.parse(window.localStorage.getItem(TABPREFIX + index)).name);
@@ -183,7 +186,7 @@
     added_list.delegate('.detail-url', 'mousedown', function(event){
         var down_date = new Date();
         mouseTimer = setInterval(function(){
-            if (new Date() - down_date > 1000 && pannelType == 'save') {
+            if (new Date() - down_date > 800 && pannelType == 'save') {
                 $(event.currentTarget).next('.remove-url').show().addClass('bounceIn animated');
                 clearInterval(mouseTimer);
             } 
