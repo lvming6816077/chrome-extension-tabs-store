@@ -7,11 +7,11 @@ chrome-extension-tabs-store
 
 ##插件使用
 
-  * ###本插件主要用于保存当前浏览器窗口的标签页(tabs);
-  * ###插件安装：![install](http://tenny.qiniudn.com/install.jpg)
-  * <h4>插件主页面：</h4>
+  * <h5>本插件主要用于保存当前浏览器窗口的标签页(tabs);</h5>
+  * <h5>插件安装：</h5>![install](http://tenny.qiniudn.com/install.jpg)
+  * <h5>插件主页面：</h5>
   * ![main page](http://tenny.qiniudn.com/main.jpg)
-  * ###如何使用？
+  * <h5>如何使用？</h5>
     * 单击Store按钮来存储你当前的tabs，单击show按钮来打开你存储的tabs，单击右上角加号，输入名称，点击submit。
     * ![add item](http://tenny.qiniudn.com/add_tabs.jpg)
     * 新增完成之后.
