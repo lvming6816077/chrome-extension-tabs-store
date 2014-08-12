@@ -19,7 +19,7 @@ chrome-extension-tabs-store
     * 查看细节内容，和删除本条内容，可以点击时间右边的两个按钮。
     * 在细节展开之后，可以通过单击来打开相应的单个页面。
     * ![open url](http://tenny.qiniudn.com/detail.jpg)
-    * 在store页面，可以点击每条内容最左边的时间数字来覆盖这条内容，在show页面，点击它会打开这条内容的所有tabs。
+    * 在store页面，可以点击每条内容最左边的时间数字来把当前的tab增加到这条内容里，在show页面，点击它会打开这条内容的所有tabs。
     * ![cover item](http://tenny.qiniudn.com/%E6%97%A0%E6%A0%87%E9%A2%98.jpg)
 
 ##插件反馈
