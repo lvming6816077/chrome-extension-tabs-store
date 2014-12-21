@@ -6,7 +6,7 @@
     var back = $('#back');
     var pop_over = $('.popup-over');
     var TABPREFIX = 'tabs_array_';
-    var NODATA = 'No Data';
+    var NODATA = 'No Data！';
     var mouseTimer;
     var pannelType = '';
     var LiItem = function(obj){
